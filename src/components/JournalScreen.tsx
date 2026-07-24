@@ -112,14 +112,14 @@ export const JournalScreen: React.FC = () => {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-bold text-slate-900 font-serif">
-              Season Journal & Earth Data Log
+              Earth Engine Season Field Journal
             </h2>
-            <span className="text-xs bg-teal-100 text-teal-800 font-mono px-2 py-0.5 rounded font-bold">
-              PS-05
+            <span className="text-xs bg-teal-100 text-teal-800 font-mono px-2.5 py-0.5 rounded-full font-bold">
+              Sentinel-2 GEE Pipeline
             </span>
           </div>
           <p className="text-xs text-slate-600">
-            Register biological applications and ingest live Google Earth Engine (GEE) satellite covariates
+            Register biological applications and ingest live Google Earth Engine (GEE) satellite environmental covariates
           </p>
         </div>
 
@@ -128,6 +128,7 @@ export const JournalScreen: React.FC = () => {
           <span>Sentinel-2 GEE Ingestor: ACTIVE</span>
         </div>
       </div>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Registration Form */}

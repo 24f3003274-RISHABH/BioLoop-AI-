@@ -14,6 +14,8 @@ import {
   RefreshCw,
   Globe,
   Cpu,
+  CloudRain,
+  ShieldCheck,
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -28,10 +30,11 @@ export const Header: React.FC = () => {
 
   const navItems = [
     { id: 'dashboard', label: 'Command Center', icon: LayoutDashboard, badge: null },
-    { id: 'cropfit', label: 'CropFit Advisor', icon: MessageSquare, badge: 'PS-03 & 04' },
-    { id: 'journal', label: 'Season Journal', icon: BookOpen, badge: `${journalRecords.length} Logs` },
-    { id: 'causal', label: 'Yield & Causal ROI', icon: LineChart, badge: 'PS-07 Engine' },
-    { id: 'benchmark', label: 'Regional Benchmarks', icon: BarChart2, badge: 'PS-06' },
+    { id: 'sowing', label: 'Monsoon & Sowing', icon: CloudRain, badge: '2026 Matrix' },
+    { id: 'cropfit', label: 'CropFit Advisor', icon: MessageSquare, badge: 'Gemini AI' },
+    { id: 'journal', label: 'Earth Engine Journal', icon: BookOpen, badge: `${journalRecords.length} Fields` },
+    { id: 'causal', label: 'Yield & Causal Twin', icon: LineChart, badge: 'Double ML' },
+    { id: 'benchmark', label: 'Efficacy Benchmarks', icon: BarChart2, badge: 'Verified' },
   ];
 
   return (

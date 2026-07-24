@@ -2,6 +2,7 @@ import React from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { Header } from './components/Header';
 import { DashboardScreen } from './components/DashboardScreen';
+import { WeatherSowingAdvisor } from './components/WeatherSowingAdvisor';
 import { CropFitScreen } from './components/CropFitScreen';
 import { JournalScreen } from './components/JournalScreen';
 import { CausalROIScreen } from './components/CausalROIScreen';
@@ -13,6 +14,7 @@ const MainContent: React.FC = () => {
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16 space-y-6">
       {activeTab === 'dashboard' && <DashboardScreen />}
+      {activeTab === 'sowing' && <WeatherSowingAdvisor />}
       {activeTab === 'cropfit' && <CropFitScreen />}
       {activeTab === 'journal' && <JournalScreen />}
       {activeTab === 'causal' && <CausalROIScreen />}
@@ -34,11 +36,11 @@ export default function App() {
             <div className="flex items-center space-x-2">
               <span className="font-bold text-white font-serif">BioLoop AI</span>
               <span>—</span>
-              <span className="text-emerald-400 font-medium">HACK CORE 2026 Integrated Solution</span>
+              <span className="text-emerald-400 font-medium">HACK CORE 2026 Integrated Platform</span>
             </div>
             <div className="text-center md:text-right text-slate-500 text-[11px]">
-              Collaboration between <strong className="text-slate-300">Syngenta Biologicals</strong> and{' '}
-              <strong className="text-slate-300">ANNAM.AI (IIT Ropar)</strong>. Solving PS-03, PS-04, PS-05, PS-06, & PS-07.
+              Developed for <strong className="text-slate-300">Syngenta Biologicals</strong> and{' '}
+              <strong className="text-slate-300">ANNAM.AI (IIT Ropar)</strong>. Precision Causal ML & Multilingual AI.
             </div>
           </div>
         </footer>

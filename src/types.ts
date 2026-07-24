@@ -1,5 +1,29 @@
 export type Language = 'en' | 'hi' | 'mr' | 'ta' | 'te';
 
+export type WeatherCondition = 'sunny' | 'rainy' | 'heatwave' | 'mild';
+
+export interface CropSowingRecommendation {
+  id: string;
+  cropName: string;
+  season: 'Kharif 2026' | 'Rabi 2026' | 'Zaid';
+  suitabilityStatus: 'Highly Recommended' | 'Moderate' | 'Reduce / Avoid';
+  monsoonSensitivity: 'Drought Resilient' | 'Flood Tolerant' | 'Root-Rot Prone';
+  recommendedBiostimulant: string;
+  companionCrop: string;
+  yieldPotentialQuintalPerAcre: number;
+  historicalYield2025: number;
+  projectedYield2026WithBio: number;
+  reasoning: string;
+}
+
+export interface BayesianModelUpdate {
+  priorMeanLift: number;
+  posteriorMeanLift: number;
+  sampleCount: number;
+  confidenceInterval: [number, number];
+  lastUpdatedDistrict: string;
+}
+
 export interface LanguageOption {
   code: Language;
   name: string;

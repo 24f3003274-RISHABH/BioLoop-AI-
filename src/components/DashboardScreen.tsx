@@ -225,7 +225,7 @@ export const DashboardScreen: React.FC = () => {
                   <Sparkles className="w-6 h-6" />
                 </div>
                 <span className="text-xs font-mono font-semibold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full">
-                  STEP 1: PS-03 & 04
+                  STEP 1: CROPFIT AI
                 </span>
               </div>
               <h4 className="text-lg font-bold text-slate-900">CropFit Multilingual Advisor</h4>
@@ -258,7 +258,7 @@ export const DashboardScreen: React.FC = () => {
                   <BookOpen className="w-6 h-6" />
                 </div>
                 <span className="text-xs font-mono font-semibold bg-teal-100 text-teal-800 px-2.5 py-1 rounded-full">
-                  STEP 2: PS-05
+                  STEP 2: EARTH ENGINE
                 </span>
               </div>
               <h4 className="text-lg font-bold text-slate-900">Log Application & Earth Data</h4>
@@ -291,7 +291,7 @@ export const DashboardScreen: React.FC = () => {
                   <LineChart className="w-6 h-6" />
                 </div>
                 <span className="text-xs font-mono font-semibold bg-indigo-100 text-indigo-800 px-2.5 py-1 rounded-full">
-                  STEP 3: PS-07
+                  STEP 3: DOUBLE ML TWIN
                 </span>
               </div>
               <h4 className="text-lg font-bold text-slate-900">Analyze Yield & Prove ROI</h4>
@@ -315,6 +315,7 @@ export const DashboardScreen: React.FC = () => {
               </button>
             </div>
           </div>
+
         </div>
       </div>
 

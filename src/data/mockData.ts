@@ -1,4 +1,4 @@
-import { BiologicalProduct, LanguageOption, ScenarioPreset, SeasonJournalRecord, BenchmarkOutcome, WeatherAlert } from '../types';
+import { BiologicalProduct, LanguageOption, ScenarioPreset, SeasonJournalRecord, BenchmarkOutcome, WeatherAlert, CropSowingRecommendation } from '../types';
 
 export const LANGUAGES: LanguageOption[] = [
   { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
@@ -6,6 +6,103 @@ export const LANGUAGES: LanguageOption[] = [
   { code: 'mr', name: 'Marathi', nativeName: 'मराठी', flag: '🇮🇳' },
   { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்', flag: '🇮🇳' },
   { code: 'te', name: 'Telugu', nativeName: 'తెలుగు', flag: '🇮🇳' },
+];
+
+export const VERNACULAR_VOICE_SAMPLES = [
+  {
+    language: 'Hinglish / Hindi',
+    label: 'Punjab Cotton Heat Wave',
+    transcript: 'Mera Bhatinda cotton khet me temperature 38°C touch kar gaya hai, patte peele ho rahe hain. Kaunsa Syngenta product daalein?',
+    parsedJson: {
+      location: 'Bhatinda, Punjab',
+      crop: 'Cotton',
+      stress: 'Extreme Heat Wave (38°C)',
+      symptom: 'Leaf Chlorosis / Yellowing',
+      recommendedProduct: 'QUANTIS (Thermal Shield)',
+      dosage: '400 ml / Acre',
+    },
+  },
+  {
+    language: 'Marathi',
+    label: 'Nashik Sugarcane Heavy Rain',
+    transcript: 'नाशिकमध्ये सततच्या पावसामुळे उसाच्या मुळांमध्ये पाणी साचले आहे. झाडांची वाढ थांबली आहे.',
+    parsedJson: {
+      location: 'Nashik, Maharashtra',
+      crop: 'Sugarcane',
+      stress: 'Excess Water / Waterlogging',
+      symptom: 'Root Hypoxia / Growth Stagnation',
+      recommendedProduct: 'ISABION (Root Vigor & Amino Boost)',
+      dosage: '300 ml / Acre',
+    },
+  },
+  {
+    language: 'Telugu',
+    label: 'Guntur Tomato Drought Shock',
+    transcript: 'గుంటూరు మిర్చి మరియు టమోటా తోటలో తేమ శాతం తక్కువగా ఉంది, పూత రాలిపోతోంది.',
+    parsedJson: {
+      location: 'Guntur, Andhra Pradesh',
+      crop: 'Tomatoes & Chilli',
+      stress: 'Soil Moisture Deficit (<18%)',
+      symptom: 'Flower Drop / Abscission',
+      recommendedProduct: 'YIELDON (Fruit Set & Sugar Transport)',
+      dosage: '250 ml / Acre',
+    },
+  },
+];
+
+export const MONSOON_CROP_RECOMMENDATIONS: CropSowingRecommendation[] = [
+  {
+    id: 'crop-paddy',
+    cropName: 'Paddy (Basmati / PR-126)',
+    season: 'Kharif 2026',
+    suitabilityStatus: 'Highly Recommended',
+    monsoonSensitivity: 'Flood Tolerant',
+    recommendedBiostimulant: 'Isabion (Rooting & Tiller Boost)',
+    companionCrop: 'Sesbania (Green Manure)',
+    yieldPotentialQuintalPerAcre: 26.5,
+    historicalYield2025: 22.8,
+    projectedYield2026WithBio: 26.8,
+    reasoning: 'Heavy monsoon forecast aligns with high water demand. Syngenta Isabion stimulates early root anchoring to survive temporary flooding.',
+  },
+  {
+    id: 'crop-soybean',
+    cropName: 'Soybean (JS 335 / JS 20-34)',
+    season: 'Kharif 2026',
+    suitabilityStatus: 'Highly Recommended',
+    monsoonSensitivity: 'Drought Resilient',
+    recommendedBiostimulant: 'Quantis (Osmoprotectant)',
+    companionCrop: 'Maize / Pigeonpea (Intercrop)',
+    yieldPotentialQuintalPerAcre: 11.2,
+    historicalYield2025: 9.4,
+    projectedYield2026WithBio: 11.5,
+    reasoning: 'Excellent nitrogen-fixing legume for Kharif 2026. Intercropping with Maize reduces runoff risk during cloudbursts.',
+  },
+  {
+    id: 'crop-cotton',
+    cropName: 'Bt Cotton (Hybrids)',
+    season: 'Kharif 2026',
+    suitabilityStatus: 'Moderate',
+    monsoonSensitivity: 'Drought Resilient',
+    recommendedBiostimulant: 'Quantis + YieldOn',
+    companionCrop: 'Groundnut / Cowpea',
+    yieldPotentialQuintalPerAcre: 13.5,
+    historicalYield2025: 11.8,
+    projectedYield2026WithBio: 13.8,
+    reasoning: 'High heat resilience, but requires raised bed sowing to prevent standing water damage during mid-season heavy rains.',
+  },
+  {
+    id: 'crop-sesame',
+    cropName: 'Sesame & Sensitive Pulses',
+    season: 'Kharif 2026',
+    suitabilityStatus: 'Reduce / Avoid',
+    monsoonSensitivity: 'Root-Rot Prone',
+    recommendedBiostimulant: 'Isabion (Drenching only)',
+    companionCrop: 'Pearl Millet (Bajra)',
+    yieldPotentialQuintalPerAcre: 4.8,
+    historicalYield2025: 6.2,
+    projectedYield2026WithBio: 5.1,
+    reasoning: 'High risk of collar rot and fungal wilt under intense monsoon humidity. Reduce acreage by 30% and switch to Bajra/Maize.',
+  },
 ];
 
 export const BIOLOGICAL_PRODUCTS: BiologicalProduct[] = [

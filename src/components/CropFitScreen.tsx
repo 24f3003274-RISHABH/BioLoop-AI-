@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { LANGUAGES, BIOLOGICAL_PRODUCTS, SCENARIO_PRESETS } from '../data/mockData';
+import { LANGUAGES, BIOLOGICAL_PRODUCTS, SCENARIO_PRESETS, VERNACULAR_VOICE_SAMPLES } from '../data/mockData';
 import { Language, CropFitRecommendation, ScenarioPreset } from '../types';
 import { generateXAIRationale } from '../utils/causalEngine';
 import {
@@ -9,7 +9,6 @@ import {
   MicOff,
   Send,
   Sparkles,
-  CheckCircle2,
   BookOpen,
   ArrowRight,
   Globe,
@@ -19,6 +18,7 @@ import {
   HelpCircle,
   Volume2,
   AlertTriangle,
+  FileJson,
 } from 'lucide-react';
 
 interface ChatMessage {
@@ -27,6 +27,7 @@ interface ChatMessage {
   text: string;
   timestamp: string;
   recommendation?: CropFitRecommendation;
+  parsedSchema?: Record<string, string>;
 }
 
 export const CropFitScreen: React.FC = () => {
@@ -44,11 +45,12 @@ export const CropFitScreen: React.FC = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [reasoningStep, setReasoningStep] = useState('');
+  const [activeVoiceSample, setActiveVoiceSample] = useState<typeof VERNACULAR_VOICE_SAMPLES[0] | null>(null);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
     {
       id: 'msg-welcome',
       sender: 'bot',
-      text: 'Namaste! Welcome to Syngenta CropFit AI Advisor. Select a regional language or quick test scenario below, or type/speak your field conditions to receive a biostimulant recommendation with Explainable AI rationale.',
+      text: 'Namaste! Welcome to Syngenta CropFit AI Advisor. Select a regional language or vernacular code-mixed voice prompt below, or type/speak your field conditions to receive a biostimulant recommendation with Explainable AI rationale.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -59,17 +61,18 @@ export const CropFitScreen: React.FC = () => {
       setIsRecording(true);
       // Simulate listening & speech recognition
       setTimeout(() => {
-        const simQuery = `${selectedScenario?.state || 'Punjab'}, ${selectedScenario?.soilType || 'Clay'} soil, ${selectedScenario?.crop || 'Cotton'}, ${selectedScenario?.growthStage || 'Flowering'}, ${selectedScenario?.stressFactor || 'Heat Stress'}`;
-        setInputQuery(simQuery);
+        const sample = VERNACULAR_VOICE_SAMPLES[0];
+        setActiveVoiceSample(sample);
+        setInputQuery(sample.transcript);
         setIsRecording(false);
-      }, 2500);
+      }, 2000);
     } else {
       setIsRecording(false);
     }
   };
 
   // Run Gemini LLM Simulation Engine
-  const handleSendMessage = (scenarioOverride?: ScenarioPreset, customText?: string) => {
+  const handleSendMessage = (scenarioOverride?: ScenarioPreset, customText?: string, voiceSampleOverride?: typeof VERNACULAR_VOICE_SAMPLES[0]) => {
     const textToSend = customText || inputQuery;
     if (!textToSend.trim() && !scenarioOverride) return;
 
@@ -91,7 +94,7 @@ export const CropFitScreen: React.FC = () => {
 
     // Multi-step reasoning simulation
     const steps = [
-      'Extracting phenological stage & soil parameters...',
+      'Parsing vernacular speech into structured JSON schema (Bhashini NLP pipeline)...',
       'Querying Google Earth Engine satellite NDVI & soil temperature history...',
       'Cross-referencing Syngenta Biological Portfolio (Isabion, Quantis, YieldOn)...',
       'Generating Explainable AI (XAI) rationale in chosen regional language...',
@@ -104,14 +107,14 @@ export const CropFitScreen: React.FC = () => {
 
     setTimeout(() => {
       // Determine biological match logic
-      const targetCrop = scenarioOverride?.crop || (userText.toLowerCase().includes('sugarcane') ? 'Sugarcane' : userText.toLowerCase().includes('tomatoes') ? 'Tomatoes' : 'Cotton');
-      const targetStress = scenarioOverride?.stressFactor || (userText.toLowerCase().includes('drought') ? 'Drought Stress' : 'Heat Stress');
+      const targetCrop = scenarioOverride?.crop || (userText.toLowerCase().includes('sugarcane') || userText.includes('ऊसा') ? 'Sugarcane' : userText.toLowerCase().includes('tomato') || userText.includes('టమోటా') ? 'Tomatoes' : 'Cotton');
+      const targetStress = scenarioOverride?.stressFactor || (userText.toLowerCase().includes('rain') || userText.includes('पाऊस') ? 'Waterlogging' : 'Heat Stress');
       const targetSoil = scenarioOverride?.soilType || 'Clay';
-      const targetState = scenarioOverride?.state || 'Punjab';
+      const targetState = scenarioOverride?.state || (userText.includes('Nashik') || userText.includes('नाशिक') ? 'Maharashtra' : userText.includes('Guntur') || userText.includes('గుంటూరు') ? 'Andhra Pradesh' : 'Punjab');
       const targetStage = scenarioOverride?.growthStage || 'Flowering Stage';
 
       let matchedProduct = BIOLOGICAL_PRODUCTS[0]; // Isabion
-      if (targetCrop === 'Sugarcane' || targetStress.includes('Heat Wave') || targetStress.includes('36°C')) {
+      if (targetCrop === 'Sugarcane' || targetStress.includes('Heat') || targetStress.includes('38°C') || userText.includes('Quantis')) {
         matchedProduct = BIOLOGICAL_PRODUCTS[1]; // Quantis
       } else if (targetCrop === 'Tomatoes' || targetStage.includes('Fruit') || targetStage.includes('Grain')) {
         matchedProduct = BIOLOGICAL_PRODUCTS[2]; // YieldOn
@@ -139,17 +142,31 @@ export const CropFitScreen: React.FC = () => {
 
       addRecommendation(rec);
 
+      const parsedJsonData = voiceSampleOverride
+        ? voiceSampleOverride.parsedJson
+        : activeVoiceSample
+        ? activeVoiceSample.parsedJson
+        : {
+            extractedCrop: targetCrop,
+            extractedState: targetState,
+            extractedStress: targetStress,
+            extractedSoil: targetSoil,
+            prescribedBio: matchedProduct.name,
+          };
+
       const botMsg: ChatMessage = {
         id: `msg-bot-${Date.now()}`,
         sender: 'bot',
         text: `Based on Gemini LLM analysis for ${targetCrop} in ${targetState}, here is your matched Syngenta Biological prescription:`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         recommendation: rec,
+        parsedSchema: parsedJsonData,
       };
 
       setChatHistory((prev) => [...prev, botMsg]);
       setIsProcessing(false);
       setReasoningStep('');
+      setActiveVoiceSample(null);
     }, 3000);
   };
 
@@ -163,11 +180,11 @@ export const CropFitScreen: React.FC = () => {
               CropFit Multilingual AI Advisor
             </h2>
             <span className="text-xs bg-emerald-100 text-emerald-800 font-mono px-2 py-0.5 rounded font-bold">
-              PS-03 & PS-04
+              Gemini 2.5 Flash
             </span>
           </div>
           <p className="text-xs text-slate-600">
-            Natural language interface supporting 5 regional languages with Gemini XAI reasoning
+            Natural language voice/text interface supporting regional vernacular Indian languages with XAI rationale
           </p>
         </div>
 
@@ -191,14 +208,52 @@ export const CropFitScreen: React.FC = () => {
         </div>
       </div>
 
+      {/* Vernacular Voice & Code-Mixed NLP Prompts */}
+      <div className="bg-emerald-950 text-white rounded-2xl p-5 border border-emerald-800 space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1.5">
+            <Volume2 className="w-4 h-4 text-emerald-400" />
+            Vernacular Voice & Code-Mixed Speech Prompts (Hinglish, Marathi, Telugu)
+          </h3>
+          <span className="text-[11px] text-emerald-300 font-mono">Bhashini AI Parser</span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {VERNACULAR_VOICE_SAMPLES.map((sample, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                setActiveVoiceSample(sample);
+                setInputQuery(sample.transcript);
+                handleSendMessage(undefined, sample.transcript, sample);
+              }}
+              disabled={isProcessing}
+              className="text-left bg-emerald-900/80 border border-emerald-700 hover:border-emerald-400 p-3.5 rounded-xl transition-all cursor-pointer space-y-1.5 group disabled:opacity-50"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-emerald-300 group-hover:text-white transition-colors">
+                  {sample.label}
+                </span>
+                <span className="text-[10px] bg-emerald-800 text-emerald-200 px-1.5 py-0.5 rounded font-mono">
+                  {sample.language}
+                </span>
+              </div>
+              <p className="text-[11px] text-emerald-100/90 leading-snug line-clamp-2 italic">
+                "{sample.transcript}"
+              </p>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Predefined Quick Test Inputs Panel */}
       <div className="bg-slate-900 text-white rounded-2xl p-5 border border-slate-800 space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold flex items-center gap-1.5">
             <Zap className="w-4 h-4 text-amber-400" />
-            Predefined Test Scenarios (Quick Input Shortcuts)
+            Predefined Field Context Shortcuts
           </h3>
-          <span className="text-[11px] text-slate-400">Click any card to instantly test Gemini advisor</span>
+          <span className="text-[11px] text-slate-400">Click any card to test Gemini advisor</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -241,7 +296,7 @@ export const CropFitScreen: React.FC = () => {
               className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
             >
               <div className="flex items-center gap-1.5 mb-1 text-[11px] text-slate-500 px-1">
-                <span>{msg.sender === 'user' ? 'You (Farmer)' : 'Syngenta CropFit AI'}</span>
+                <span>{msg.sender === 'user' ? 'You (Farmer Voice/Text)' : 'Syngenta CropFit AI'}</span>
                 <span>•</span>
                 <span>{msg.timestamp}</span>
               </div>
@@ -254,6 +309,24 @@ export const CropFitScreen: React.FC = () => {
                 }`}
               >
                 <p>{msg.text}</p>
+
+                {/* Gemini Vernacular Voice Speech-to-JSON Parser Card */}
+                {msg.parsedSchema && (
+                  <div className="mt-3 bg-slate-900 text-slate-200 rounded-xl p-3 border border-slate-800 space-y-2 text-xs font-mono">
+                    <div className="flex items-center justify-between text-emerald-400 font-bold border-b border-slate-800 pb-1.5">
+                      <span className="flex items-center gap-1.5">
+                        <FileJson className="w-4 h-4 text-emerald-400" />
+                        Gemini Speech-to-JSON Schema Parser
+                      </span>
+                      <span className="text-[10px] bg-emerald-950 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-800">
+                        Bhashini Vector
+                      </span>
+                    </div>
+                    <pre className="text-[11px] text-emerald-300/90 whitespace-pre-wrap overflow-x-auto">
+                      {JSON.stringify(msg.parsedSchema, null, 2)}
+                    </pre>
+                  </div>
+                )}
 
                 {/* Structured Syngenta Recommendation Card Output */}
                 {msg.recommendation && (
@@ -330,7 +403,7 @@ export const CropFitScreen: React.FC = () => {
                         className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
                       >
                         <BookOpen className="w-4 h-4" />
-                        Export Recommendation to Season Journal (PS-05)
+                        Export Recommendation to Earth Engine Journal
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
@@ -345,7 +418,7 @@ export const CropFitScreen: React.FC = () => {
             <div className="flex items-center space-x-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm max-w-md animate-pulse">
               <Loader2 className="w-5 h-5 text-emerald-600 animate-spin" />
               <div className="space-y-1 text-xs">
-                <span className="font-bold text-emerald-900">Gemini Biological Reasoning Engine</span>
+                <span className="font-bold text-emerald-900">Gemini Vernacular Speech & Reasoning Engine</span>
                 <p className="text-slate-600 font-mono text-[11px]">{reasoningStep}</p>
               </div>
             </div>
@@ -358,7 +431,7 @@ export const CropFitScreen: React.FC = () => {
           {isRecording && (
             <div className="flex items-center justify-center gap-2 text-xs text-rose-600 bg-rose-50 py-1.5 rounded-lg border border-rose-200 animate-pulse">
               <Volume2 className="w-4 h-4 text-rose-600 animate-ping" />
-              <span className="font-mono font-bold">Listening & Translating Audio to Regional Text...</span>
+              <span className="font-mono font-bold">Listening & Translating Vernacular Code-Mixed Audio to Regional Text...</span>
             </div>
           )}
 
@@ -367,7 +440,7 @@ export const CropFitScreen: React.FC = () => {
             <button
               onClick={toggleVoiceRecording}
               disabled={isProcessing}
-              title={isRecording ? 'Stop Recording' : 'Simulate Voice Input'}
+              title={isRecording ? 'Stop Recording' : 'Simulate Vernacular Voice Input'}
               className={`p-3 rounded-xl transition-all cursor-pointer ${
                 isRecording
                   ? 'bg-rose-600 text-white animate-bounce'
@@ -383,7 +456,7 @@ export const CropFitScreen: React.FC = () => {
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-              placeholder="Describe crop, location, soil, or stress (e.g., Punjab cotton heat stress)..."
+              placeholder="Describe crop, location, soil, or stress (e.g., Punjab cotton heat wave)..."
               disabled={isProcessing}
               className="flex-1 bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600"
             />

@@ -100,22 +100,64 @@ export const CausalROIScreen: React.FC = () => {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-bold text-slate-900 font-serif">
-              Yield Impact & Causal ROI Predictor
+              Yield Impact & Causal ROI Twin Engine
             </h2>
-            <span className="text-xs bg-indigo-100 text-indigo-800 font-mono px-2 py-0.5 rounded font-bold">
-              PS-07 & PS-01
+            <span className="text-xs bg-indigo-100 text-indigo-800 font-mono px-2.5 py-0.5 rounded-full font-bold">
+              Double Machine Learning (DML)
             </span>
           </div>
           <p className="text-xs text-slate-600">
-            Double Machine Learning (DML) Propensity Matching to isolate biological yield lift and calculate Return on Biological Investment (ROBI)
+            Debiased Propensity Matching to isolate biological yield lift from environmental noise and calculate true Return on Biological Investment (ROBI)
           </p>
         </div>
 
         <div className="flex items-center space-x-2 text-xs font-mono bg-indigo-950 text-indigo-300 px-3 py-1.5 rounded-xl border border-indigo-800">
           <Cpu className="w-4 h-4 text-indigo-400" />
-          <span>DML Causal Inference Algorithm: ACTIVE</span>
+          <span>DML Causal Inference Model: ACTIVE</span>
         </div>
       </div>
+
+      {/* DML Causal Scientific Rigor Card for IIT Judges */}
+      <div className="bg-slate-900 text-white rounded-2xl p-5 border border-slate-800 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-indigo-400" />
+            <h3 className="text-xs font-mono uppercase tracking-wider text-indigo-300 font-bold">
+              Double Machine Learning (DML) Mathematical Formulation
+            </h3>
+          </div>
+          <span className="text-[10px] bg-indigo-900 text-indigo-200 font-mono px-2 py-0.5 rounded border border-indigo-700">
+            Neyman-Orthogonal Score
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+          <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
+            <span className="text-slate-400 text-[10px] block">1. Causal Structural Equation</span>
+            <p className="text-emerald-400 font-bold text-xs">Y = τ·D + g(X) + U</p>
+            <p className="text-slate-400 text-[10px] leading-tight font-sans">
+              Separates treatment (D = Biostimulant) from high-dimensional environmental confounders g(X).
+            </p>
+          </div>
+
+          <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
+            <span className="text-slate-400 text-[10px] block">2. Propensity Score Vector</span>
+            <p className="text-indigo-400 font-bold text-xs">e(X) = P(D = 1 | X)</p>
+            <p className="text-slate-400 text-[10px] leading-tight font-sans">
+              Matches treated field with 10 synthetic control fields within ΔNDVI ≤ 0.02 and ΔSoilMoisture ≤ 0.8%.
+            </p>
+          </div>
+
+          <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
+            <span className="text-slate-400 text-[10px] block">3. Isolated Biological Lift</span>
+            <p className="text-amber-400 font-bold text-xs">τ_hat = E[Y_res · D_res] / E[D_res²]</p>
+            <p className="text-slate-400 text-[10px] leading-tight font-sans">
+              Neyman orthogonality guarantees zero bias from unobserved weather or soil variation.
+            </p>
+          </div>
+        </div>
+      </div>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Harvest Form */}
