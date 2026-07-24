@@ -35,10 +35,11 @@ export const BenchmarkScreen: React.FC = () => {
   const filteredOutcomes = benchmarkOutcomes.filter((outcome) => {
     const matchCrop = selectedCrop === 'All' || outcome.crop === selectedCrop;
     const matchProduct = selectedProduct === 'All' || outcome.product === selectedProduct;
+    const term = (searchTerm || '').toLowerCase();
     const matchSearch =
-      outcome.district.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      outcome.state.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      outcome.farmerName.toLowerCase().includes(searchTerm.toLowerCase());
+      (outcome.district || '').toLowerCase().includes(term) ||
+      (outcome.state || '').toLowerCase().includes(term) ||
+      (outcome.farmerName || '').toLowerCase().includes(term);
     return matchCrop && matchProduct && matchSearch;
   });
 

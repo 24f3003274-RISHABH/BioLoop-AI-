@@ -162,7 +162,7 @@ export const DashboardScreen: React.FC = () => {
                 </span>
                 <button
                   onClick={() => {
-                    const matchedPreset = SCENARIO_PRESETS.find((p) => p.state.includes('Punjab')) || SCENARIO_PRESETS[0];
+                    const matchedPreset = SCENARIO_PRESETS.find((p) => p?.state?.includes('Punjab')) || SCENARIO_PRESETS[0];
                     setSelectedScenario(matchedPreset);
                     setActiveTab('cropfit');
                   }}

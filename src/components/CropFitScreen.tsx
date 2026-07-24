@@ -108,16 +108,18 @@ export const CropFitScreen: React.FC = () => {
 
     setTimeout(() => {
       // Determine biological match logic
-      const targetCrop = scenarioOverride?.crop || (userText.toLowerCase().includes('sugarcane') || userText.includes('ऊसा') ? 'Sugarcane' : userText.toLowerCase().includes('tomato') || userText.includes('టమోటా') ? 'Tomatoes' : 'Cotton');
-      const targetStress = scenarioOverride?.stressFactor || (userText.toLowerCase().includes('rain') || userText.includes('पाऊस') ? 'Waterlogging' : 'Heat Stress');
+      const safeText = userText || '';
+      const lowerText = safeText.toLowerCase();
+      const targetCrop = scenarioOverride?.crop || (lowerText.includes('sugarcane') || safeText.includes('ऊसा') ? 'Sugarcane' : lowerText.includes('tomato') || safeText.includes('టమోటా') ? 'Tomatoes' : 'Cotton');
+      const targetStress = scenarioOverride?.stressFactor || (lowerText.includes('rain') || safeText.includes('पाऊस') ? 'Waterlogging' : 'Heat Stress');
       const targetSoil = scenarioOverride?.soilType || 'Clay';
-      const targetState = scenarioOverride?.state || (userText.includes('Nashik') || userText.includes('नाशिक') ? 'Maharashtra' : userText.includes('Guntur') || userText.includes('గుంటూరు') ? 'Andhra Pradesh' : 'Punjab');
+      const targetState = scenarioOverride?.state || (safeText.includes('Nashik') || safeText.includes('नाशिक') ? 'Maharashtra' : safeText.includes('Guntur') || safeText.includes('గుంటూరు') ? 'Andhra Pradesh' : 'Punjab');
       const targetStage = scenarioOverride?.growthStage || 'Flowering Stage';
 
       let matchedProduct = BIOLOGICAL_PRODUCTS[0]; // Isabion
-      if (targetCrop === 'Sugarcane' || targetStress.includes('Heat') || targetStress.includes('38°C') || userText.includes('Quantis')) {
+      if (targetCrop === 'Sugarcane' || targetStress?.includes('Heat') || targetStress?.includes('38°C') || safeText.includes('Quantis')) {
         matchedProduct = BIOLOGICAL_PRODUCTS[1]; // Quantis
-      } else if (targetCrop === 'Tomatoes' || targetStage.includes('Fruit') || targetStage.includes('Grain')) {
+      } else if (targetCrop === 'Tomatoes' || targetStage?.includes('Fruit') || targetStage?.includes('Grain')) {
         matchedProduct = BIOLOGICAL_PRODUCTS[2]; // YieldOn
       }
 

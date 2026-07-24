@@ -162,14 +162,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       productName: rec.product.name,
       applicationDate: new Date().toISOString().split('T')[0],
       plotSizeAcres: 5.0,
-      locationName: `${rec.scenarioContext.state}`,
-      latitude: rec.scenarioContext.state.includes('Punjab') ? 30.211 : 20.005,
-      longitude: rec.scenarioContext.state.includes('Punjab') ? 74.945 : 73.789,
-      observedCropHealth: rec.scenarioContext.stressFactor.includes('Heat')
+      locationName: `${rec.scenarioContext?.state || 'Punjab'}`,
+      latitude: rec.scenarioContext?.state?.includes('Punjab') ? 30.211 : 20.005,
+      longitude: rec.scenarioContext?.state?.includes('Punjab') ? 74.945 : 73.789,
+      observedCropHealth: rec.scenarioContext?.stressFactor?.includes('Heat')
         ? 'Heat Stressed'
         : 'Water Stressed',
-      soilType: rec.scenarioContext.soilType,
-      cropType: rec.scenarioContext.crop,
+      soilType: rec.scenarioContext?.soilType || 'Black Soil',
+      cropType: rec.scenarioContext?.crop || 'Cotton',
       geeMetrics: {
         ndvi: 0.66,
         soilMoisturePercent: 24.5,

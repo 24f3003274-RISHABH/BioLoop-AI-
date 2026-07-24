@@ -327,9 +327,9 @@ export const JournalScreen: React.FC = () => {
                     <span className="text-slate-600 text-[10px] select-none">&gt;</span>
                     <span
                       className={
-                        log.includes('SUCCESS')
+                        log?.includes('SUCCESS')
                           ? 'text-emerald-300 font-bold'
-                          : log.includes('GEE')
+                          : log?.includes('GEE')
                           ? 'text-teal-300'
                           : 'text-amber-300'
                       }
