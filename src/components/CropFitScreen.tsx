@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { LANGUAGES, BIOLOGICAL_PRODUCTS, SCENARIO_PRESETS, VERNACULAR_VOICE_SAMPLES } from '../data/mockData';
 import { Language, CropFitRecommendation, ScenarioPreset } from '../types';
 import { generateXAIRationale } from '../utils/causalEngine';
+import { translateText } from '../utils/translations';
 import {
   MessageSquare,
   Mic,
@@ -375,6 +376,14 @@ export const CropFitScreen: React.FC = () => {
                       <div className="text-[11px] text-amber-300 font-medium flex items-center gap-1.5 bg-amber-950/40 p-2 rounded border border-amber-800/40">
                         <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />
                         <span>Optimal Window: {msg.recommendation.optimalWindow}</span>
+                      </div>
+
+                      {/* Chemical Fertilizer Reduction Notice */}
+                      <div className="text-xs bg-emerald-900/90 text-emerald-200 p-2.5 rounded-lg border border-emerald-700 flex items-center gap-2 font-mono">
+                        <Zap className="w-4 h-4 text-emerald-400 shrink-0 animate-pulse" />
+                        <span>
+                          <strong>Chemical Reduction Target:</strong> Saves 25-30% Chemical Urea/NPK (25 kg/acre) & saves ₹1,400/acre in chemical costs.
+                        </span>
                       </div>
                     </div>
 

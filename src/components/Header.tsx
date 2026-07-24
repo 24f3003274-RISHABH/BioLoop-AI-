@@ -2,6 +2,7 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 import { LANGUAGES } from '../data/mockData';
 import { Language } from '../types';
+import { translateText } from '../utils/translations';
 import {
   Sprout,
   LayoutDashboard,
@@ -29,12 +30,12 @@ export const Header: React.FC = () => {
   } = useApp();
 
   const navItems = [
-    { id: 'dashboard', label: 'Command Center', icon: LayoutDashboard, badge: null },
-    { id: 'sowing', label: 'Monsoon & Sowing', icon: CloudRain, badge: '2026 Matrix' },
-    { id: 'cropfit', label: 'CropFit Advisor', icon: MessageSquare, badge: 'Gemini AI' },
-    { id: 'journal', label: 'Earth Engine Journal', icon: BookOpen, badge: `${journalRecords.length} Fields` },
-    { id: 'causal', label: 'Yield & Causal Twin', icon: LineChart, badge: 'Double ML' },
-    { id: 'benchmark', label: 'Efficacy Benchmarks', icon: BarChart2, badge: 'Verified' },
+    { id: 'dashboard', label: translateText('navDashboard', selectedLanguage), icon: LayoutDashboard, badge: null },
+    { id: 'sowing', label: translateText('navSowing', selectedLanguage), icon: CloudRain, badge: '2026 Matrix' },
+    { id: 'cropfit', label: translateText('navCropfit', selectedLanguage), icon: MessageSquare, badge: 'Gemini AI' },
+    { id: 'journal', label: translateText('navJournal', selectedLanguage), icon: BookOpen, badge: `${journalRecords.length} Fields` },
+    { id: 'causal', label: translateText('navCausal', selectedLanguage), icon: LineChart, badge: 'Double ML' },
+    { id: 'benchmark', label: translateText('navBenchmark', selectedLanguage), icon: BarChart2, badge: 'Verified' },
   ];
 
   return (
@@ -56,14 +57,15 @@ export const Header: React.FC = () => {
 
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-1.5 text-emerald-300 text-xs">
-              <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-              <span className="hidden md:inline">GEE & SWAN Satellite Link:</span>
-              <span className="font-mono text-emerald-300 font-bold">ONLINE</span>
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="hidden md:inline font-mono font-semibold text-amber-300">
+                {translateText('chemicalReductionTag', selectedLanguage)}
+              </span>
             </div>
-            <div className="flex items-center space-x-1 text-emerald-300 text-xs">
-              <Database className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="hidden md:inline">Storage:</span>
-              <span className="font-mono text-emerald-300">ACTIVE</span>
+            <div className="flex items-center space-x-1.5 text-emerald-300 text-xs">
+              <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+              <span className="hidden md:inline">GEE Satellite:</span>
+              <span className="font-mono text-emerald-300 font-bold">ONLINE</span>
             </div>
             <button
               onClick={() => {
@@ -73,7 +75,7 @@ export const Header: React.FC = () => {
               className="flex items-center gap-1 text-emerald-300 hover:text-white transition-colors text-xs bg-emerald-800/60 hover:bg-emerald-800 px-2 py-0.5 rounded border border-emerald-700/50 cursor-pointer"
             >
               <RefreshCw className="w-3 h-3" />
-              <span className="hidden sm:inline">Reset Demo</span>
+              <span className="hidden sm:inline">Reset</span>
             </button>
           </div>
         </div>
@@ -91,14 +93,14 @@ export const Header: React.FC = () => {
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-xl font-bold tracking-tight text-white font-serif">
-                    BioLoop <span className="text-emerald-400 font-sans font-extrabold">AI</span>
+                    {translateText('appName', selectedLanguage)}
                   </h1>
                   <span className="text-[10px] uppercase font-mono tracking-wider text-emerald-300 bg-emerald-900/80 px-2 py-0.5 rounded border border-emerald-700/60">
                     Causal Yield Engine
                   </span>
                 </div>
                 <p className="text-xs text-emerald-300/80">
-                  Precision Biologicals & Causal ROI Verification Platform
+                  {translateText('tagline', selectedLanguage)}
                 </p>
               </div>
             </div>
@@ -121,16 +123,16 @@ export const Header: React.FC = () => {
 
           {/* Desktop Language Picker */}
           <div className="hidden md:flex items-center space-x-3">
-            <div className="flex items-center gap-1.5 bg-emerald-900/80 border border-emerald-700/60 rounded-lg px-2.5 py-1 text-xs text-emerald-200">
-              <Globe className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-300 font-medium">Advisor Language:</span>
+            <div className="flex items-center gap-1.5 bg-emerald-900/80 border border-emerald-700/60 rounded-lg px-2.5 py-1.5 text-xs text-emerald-200 shadow-sm">
+              <Globe className="w-4 h-4 text-emerald-400" />
+              <span className="text-emerald-300 font-semibold">{translateText('langSelect', selectedLanguage)}</span>
               <select
                 value={selectedLanguage}
                 onChange={(e) => setSelectedLanguage(e.target.value as Language)}
-                className="bg-transparent text-emerald-100 font-semibold focus:outline-none cursor-pointer text-xs"
+                className="bg-emerald-950 text-emerald-100 font-bold focus:outline-none cursor-pointer text-xs px-2 py-1 rounded border border-emerald-700"
               >
                 {LANGUAGES.map((lang) => (
-                  <option key={lang.code} value={lang.code} className="bg-emerald-950 text-white">
+                  <option key={lang.code} value={lang.code} className="bg-emerald-950 text-white font-medium">
                     {lang.flag} {lang.nativeName} ({lang.name})
                   </option>
                 ))}

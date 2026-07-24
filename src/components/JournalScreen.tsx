@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { BIOLOGICAL_PRODUCTS } from '../data/mockData';
 import { SeasonJournalRecord } from '../types';
+import { SatelliteMapView } from './SatelliteMapView';
+import { translateText } from '../utils/translations';
 import {
   BookOpen,
   PlusCircle,
@@ -17,6 +19,7 @@ import {
   Globe,
   Radio,
   Sparkles,
+  ShieldCheck,
 } from 'lucide-react';
 
 export const JournalScreen: React.FC = () => {
@@ -26,6 +29,7 @@ export const JournalScreen: React.FC = () => {
     deleteJournalRecord,
     setActiveTab,
     setSelectedJournalForAnalysis,
+    selectedLanguage,
   } = useApp();
 
   const [productName, setProductName] = useState('Isabion');
@@ -129,6 +133,17 @@ export const JournalScreen: React.FC = () => {
         </div>
       </div>
 
+
+      {/* Sentinel-2 Interactive Satellite Map Canvas */}
+      <SatelliteMapView
+        locationName={locationName}
+        latitude={latitude}
+        longitude={longitude}
+        cropType={cropType}
+        ndvi={0.68}
+        soilMoisture={26.4}
+        soilTemp={28.2}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Registration Form */}

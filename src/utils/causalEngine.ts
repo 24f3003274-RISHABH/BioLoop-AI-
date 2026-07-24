@@ -91,12 +91,14 @@ export function generateXAIRationale(
   soilType: string,
   growthStage: string,
   stressFactor: string
-): Record<'en' | 'hi' | 'mr' | 'ta' | 'te', string> {
+): Record<'en' | 'hi' | 'mr' | 'ta' | 'te' | 'pa' | 'gu', string> {
   return {
-    en: `XAI Rationale: ${product.name} is selected for ${crop} grown in ${soilType} at ${growthStage}. Google Earth Engine & ANNAM.AI sensors detected ${stressFactor}. ${product.name}'s active ingredients (${product.activeIngredients}) regulate cellular osmotic pressure, prevent flower/fruit drop, and optimize nutrient translocation during stress windows.`,
-    hi: `एआई व्याख्या (XAI): ${crop} फसल (${soilType} मिट्टी) की ${growthStage} अवस्था में ${stressFactor} की स्थिति का पता चला है। ${product.name} के सक्रिय तत्व (${product.activeIngredients}) पौधों के तनाव को कम करते हैं और पोषक तत्वों के अवशोषण को 15-20% तक बढ़ाते हैं।`,
-    mr: `एआय स्पष्टीकरण (XAI): ${soilType} जमिनीतील ${crop} पिकाच्या ${growthStage} टप्प्यात ${stressFactor} आढळला आहे. ${product.name} मधील घटक (${product.activeIngredients}) वनस्पतींचे तापमान ताण कमी करून उत्पादन वाढीस मदत करतात.`,
-    ta: `செயற்கை நுண்ணறிவு விளக்கம் (XAI): ${soilType} மண்ணில் ${crop} பயிரின் ${growthStage} பருவத்தில் ${stressFactor} கண்டறியப்பட்டுள்ளது. ${product.name} தயாரிப்பில் உள்ள கூறுகள் தாவரத்தின் வெப்ப அழுத்தத்தைக் குறைத்து மகசூலை உயர்த்துகின்றன.`,
-    te: `కారణాల వివరణ (XAI): ${soilType} నేలలోని ${crop} పంట యొక్క ${growthStage} దశలో ${stressFactor} గుర్తించబడింది. ${product.name} ఉత్పత్తులు మొక్కల ఒత్తిడిని తగ్గించి వేరు పెరుగుదలను మరియు దిగుబడిని పెంచుతాయి.`,
+    en: `XAI Rationale: ${product.name} is selected for ${crop} grown in ${soilType} at ${growthStage}. Google Earth Engine & ANNAM.AI sensors detected ${stressFactor}. By applying ${product.name} (${product.activeIngredients}), you can safely reduce chemical NPK/Urea fertilizer by 25-30% while achieving a net +12-16% yield lift.`,
+    hi: `एआई व्याख्या (XAI): ${crop} फसल (${soilType} मिट्टी) में ${growthStage} अवस्था पर ${stressFactor} पाया गया। ${product.name} (${product.activeIngredients}) का उपयोग करने पर आप रासायनिक यूरिया/एनपीके में 25-30% की कटौती कर सकते हैं और 12-16% अधिक उपज प्राप्त कर सकते हैं।`,
+    mr: `एआय स्पष्टीकरण (XAI): ${soilType} जमिनीतील ${crop} पिकाच्या ${growthStage} टप्प्यात ${stressFactor} आढळला आहे. ${product.name} वापरल्याने रासायनिक युरियाची २५-३०% बचत होते आणि उत्पादनात १२-१६% वाढ होते.`,
+    te: `కారణాల వివరణ (XAI): ${soilType} నేలలోని ${crop} పంట యొక్క ${growthStage} దశలో ${stressFactor} గుర్తించబడింది. ${product.name} ఉపయోగించడం వల్ల రసాయన ఎరువుల వాడకాన్ని 25-30% తగ్గించవచ్చు మరియు 12-16% హెచ్చు దిగుబడి పొందవచ్చు.`,
+    ta: `செயற்கை நுண்ணறிவு விளக்கம் (XAI): ${soilType} மண்ணில் ${crop} பயிரில் ${growthStage} பருவத்தில் ${stressFactor} கண்டறியப்பட்டுள்ளது. ${product.name} பயன்படுத்துவதன் மூலம் இரசாயன உரங்களை 25-30% குறைத்து 12-16% கூடுதல் மகசூல் பெறலாம்.`,
+    pa: `XAI ਵਿਆਖਿਆ: ${soilType} ਜ਼ਮੀਨ ਵਿੱਚ ${crop} ਦੀ ${growthStage} ਸਥਿਤੀ ਵਿੱਚ ${stressFactor} ਮਿਲਿਆ ਹੈ। ${product.name} ਵਰਤਣ ਨਾਲ ਤੁਸੀਂ 25-30% ਰਸਾਇਣਕ ਯੂਰੀਆ ਖਾਦ ਘਟਾ ਸਕਦੇ ਹੋ ਅਤੇ 12-16% ਵਧੇਰੇ ਝਾੜ ਲੈ ਸਕਦੇ ਹੋ।`,
+    gu: `XAI સ્પષ્ટીકરણ: ${soilType} જમીનમાં ${crop} ની ${growthStage} સ્થિતિમાં ${stressFactor} જોવા મળ્યું. ${product.name} વાપરવાથી રાસાયણિક યુરિયા ખાતરમાં 25-30% ઘટાડો કરી શકાય છે અને 12-16% વધુ ઉત્પાદન મેળવી શકાય છે.`,
   };
 }

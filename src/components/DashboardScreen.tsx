@@ -2,6 +2,7 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 import { MOCK_WEATHER_ALERTS, BIOLOGICAL_PRODUCTS, SCENARIO_PRESETS } from '../data/mockData';
 import { CausalInferenceResult } from '../types';
+import { translateText } from '../utils/translations';
 import {
   MapPin,
   Thermometer,
@@ -17,6 +18,7 @@ import {
   CheckCircle2,
   Sun,
   Activity,
+  Zap,
 } from 'lucide-react';
 
 export const DashboardScreen: React.FC = () => {
@@ -27,6 +29,7 @@ export const DashboardScreen: React.FC = () => {
     journalRecords,
     causalResults,
     setSelectedScenario,
+    selectedLanguage,
   } = useApp();
 
   // Compute live statistics
@@ -174,7 +177,7 @@ export const DashboardScreen: React.FC = () => {
       </div>
 
       {/* KPI Stats Bar */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm space-y-1">
           <div className="text-xs font-medium text-slate-500">Total Farm Area Tracked</div>
           <div className="text-2xl font-bold text-emerald-950 font-serif">
@@ -208,6 +211,17 @@ export const DashboardScreen: React.FC = () => {
             +{avgYieldLift}% <span className="text-sm font-sans font-normal text-slate-600">Avg</span>
           </div>
           <div className="text-[11px] text-emerald-700 font-medium">Syngenta Biostimulant Lift</div>
+        </div>
+
+        <div className="bg-emerald-950 text-white rounded-xl p-4 border border-emerald-800 shadow-sm space-y-1">
+          <div className="text-xs font-medium text-emerald-300 flex items-center gap-1">
+            <Zap className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+            Chemical Fertilizer Cut
+          </div>
+          <div className="text-2xl font-bold text-white font-serif">
+            -28.5% <span className="text-sm font-sans font-normal text-emerald-300">Urea</span>
+          </div>
+          <div className="text-[11px] text-emerald-400 font-mono">25 kg Chemical Saved/Acre</div>
         </div>
       </div>
 

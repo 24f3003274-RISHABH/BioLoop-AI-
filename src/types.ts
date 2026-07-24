@@ -1,4 +1,4 @@
-export type Language = 'en' | 'hi' | 'mr' | 'ta' | 'te';
+export type Language = 'en' | 'hi' | 'mr' | 'ta' | 'te' | 'pa' | 'gu';
 
 export type WeatherCondition = 'sunny' | 'rainy' | 'heatwave' | 'mild';
 
