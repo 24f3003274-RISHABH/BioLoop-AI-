@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { MONSOON_CROP_RECOMMENDATIONS } from '../data/mockData';
 import { WeatherCondition } from '../types';
+import { InteractiveWeatherWidget } from './InteractiveWeatherWidget';
 import {
   CloudRain,
   Sun,
@@ -105,6 +106,9 @@ export const WeatherSowingAdvisor: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Interactive Weather Widget with OpenWeatherMap & Open-Meteo Real-time Data */}
+      <InteractiveWeatherWidget />
+
       {/* Live Agroclimatic Weather & Season Banner */}
       <div className={`${currentProfile.bgColor} text-white rounded-2xl p-6 shadow-xl border ${currentProfile.borderColor} relative overflow-hidden transition-all duration-300`}>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">

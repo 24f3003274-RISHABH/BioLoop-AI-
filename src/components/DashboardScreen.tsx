@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { MOCK_WEATHER_ALERTS, BIOLOGICAL_PRODUCTS, SCENARIO_PRESETS } from '../data/mockData';
 import { CausalInferenceResult } from '../types';
 import { translateText } from '../utils/translations';
+import { InteractiveWeatherWidget } from './InteractiveWeatherWidget';
 import {
   MapPin,
   Thermometer,
@@ -139,6 +140,9 @@ export const DashboardScreen: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Live Interactive Weather Widget */}
+        <InteractiveWeatherWidget />
 
         {/* Alerts Stream */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
