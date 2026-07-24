@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { BIOLOGICAL_PRODUCTS } from '../data/mockData';
 import { SeasonJournalRecord } from '../types';
 import { SatelliteMapView } from './SatelliteMapView';
+import { SatelliteFieldExplorer } from './SatelliteFieldExplorer';
 import { translateText } from '../utils/translations';
 import {
   BookOpen,
@@ -134,15 +135,12 @@ export const JournalScreen: React.FC = () => {
       </div>
 
 
-      {/* Sentinel-2 Interactive Satellite Map Canvas */}
-      <SatelliteMapView
-        locationName={locationName}
-        latitude={latitude}
-        longitude={longitude}
-        cropType={cropType}
-        ndvi={0.68}
-        soilMoisture={26.4}
-        soilTemp={28.2}
+      {/* Leaflet Satellite Field Explorer with Multispectral Controls */}
+      <SatelliteFieldExplorer
+        initialLat={latitude}
+        initialLng={longitude}
+        initialCrop={cropType}
+        initialLocationName={locationName}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

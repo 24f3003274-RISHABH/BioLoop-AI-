@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { DashboardScreen } from './components/DashboardScreen';
 import { WeatherSowingAdvisor } from './components/WeatherSowingAdvisor';
 import { CropFitScreen } from './components/CropFitScreen';
+import { SatelliteFieldExplorer } from './components/SatelliteFieldExplorer';
 import { JournalScreen } from './components/JournalScreen';
 import { CausalROIScreen } from './components/CausalROIScreen';
 import { BenchmarkScreen } from './components/BenchmarkScreen';
@@ -16,6 +17,7 @@ const MainContent: React.FC = () => {
       {activeTab === 'dashboard' && <DashboardScreen />}
       {activeTab === 'sowing' && <WeatherSowingAdvisor />}
       {activeTab === 'cropfit' && <CropFitScreen />}
+      {activeTab === 'satellite' && <SatelliteFieldExplorer />}
       {activeTab === 'journal' && <JournalScreen />}
       {activeTab === 'causal' && <CausalROIScreen />}
       {activeTab === 'benchmark' && <BenchmarkScreen />}
