@@ -11,6 +11,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     navJournal: 'Earth Engine Journal',
     navCausal: 'Yield & Causal Twin',
     navBenchmark: 'Efficacy Benchmarks',
+    navSatellite: 'Satellite Explorer',
     langSelect: 'PAN-India Language:',
     chemicalReductionTag: '30% Chemical Fertilizer Reduction Target',
 
@@ -64,6 +65,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     navJournal: 'अर्थ इंजन जर्नल',
     navCausal: 'उपज एवं कारण परिणाम ट्विन',
     navBenchmark: 'क्षेत्रीय मानक बेंचमार्क',
+    navSatellite: 'सैटेलाइट एक्सप्लोरर',
     langSelect: 'संपूर्ण भारत भाषा:',
     chemicalReductionTag: '30% रासायनिक उर्वरक में कमी का लक्ष्य',
 
@@ -117,6 +119,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     navJournal: 'अर्थ इंजिन शेत नोंदवही',
     navCausal: 'उत्पादन व कॉझल मॉडेल',
     navBenchmark: 'प्रादेशिक बेंचमार्क',
+    navSatellite: 'सॅटेलाइट नकाशे',
     langSelect: 'भारत भाषा निवडा:',
     chemicalReductionTag: '३०% रासायनिक खत कपात उद्दिष्ट',
 
@@ -170,6 +173,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     navJournal: 'ఎర్త్ ఇంజిన్ ఫీల్డ్ జర్నల్',
     navCausal: 'దిగుబడి & కాజల్ మోడల్',
     navBenchmark: 'ప్రాంతీయ బెంచ్‌మార్క్‌లు',
+    navSatellite: 'శాటిలైట్ ఎక్స్‌ప్లోరర్',
     langSelect: 'భారతీయ భాషను ఎంచుకోండి:',
     chemicalReductionTag: '30% రసాయన ఎరువుల తగ్గింపు లక్ష్యం',
 
@@ -217,6 +221,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     navJournal: 'எர்த் என்ஜின் புலம் டைரி',
     navCausal: 'மகசூல் & காரணி மாதிரி',
     navBenchmark: 'மண்டல ஒப்பீடுகள்',
+    navSatellite: 'செயற்கைக்கோள் வரைபடம்',
     langSelect: 'இந்திய மொழியைத் தேர்ந்தெடுக்கவும்:',
     chemicalReductionTag: '30% இரசாயன உரக் குறைப்பு இலக்கு',
 
@@ -264,6 +269,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     navJournal: 'ਅਰਥ ਇੰਜਨ ਖੇਤ ਰਜਿਸਟਰ',
     navCausal: 'ਝਾੜ ਅਤੇ ਕਾਰਣ ਮਾਡਲ',
     navBenchmark: 'ਖੇਤਰੀ ਬੈਂਚਮਾਰਕ',
+    navSatellite: 'ਸੈਟੇਲਾਈਟ ਐਕਸਪਲੋਰਰ',
     langSelect: 'ਭਾਰਤੀ ਭਾਸ਼ਾ ਚੁਣੋ:',
     chemicalReductionTag: '30% ਰਸਾਇਣਕ ਖਾਦ ਘਟਾਉਣ ਦਾ ਟੀਚਾ',
 
@@ -311,6 +317,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     navJournal: 'અર્થ એન્જિન ખેતર ડાયરી',
     navCausal: 'ઉત્પાદન અને કોઝલ મોડેલ',
     navBenchmark: 'પ્રાદેશિક બેન્ચમાર્ક',
+    navSatellite: 'સેટેલાઇਟ એક્સપ્લોરર',
     langSelect: 'ભારતીય ભાષા પસંદ કરો:',
     chemicalReductionTag: '30% રાસાયણિક ખાતર ઘટાડાનું લક્ષ્ય',
 

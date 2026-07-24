@@ -94,10 +94,10 @@ export const DashboardScreen: React.FC = () => {
           </div>
 
           <h2 className="text-2xl md:text-3xl font-bold font-serif leading-tight">
-            Welcome to BioLoop AI Farming Command Center
+            {translateText('heroTitle', selectedLanguage)}
           </h2>
           <p className="text-emerald-100/90 text-sm md:text-base leading-relaxed max-w-3xl">
-            Integrated Causal AI platform powered by <strong className="text-emerald-300">Syngenta Biologicals</strong> and <strong className="text-emerald-300">ANNAM.AI (IIT Ropar)</strong>. Track real-time satellite crop health, receive multilingual biostimulant recommendations, log application records, and prove exact Return on Biological Investment (ROBI) using Double Machine Learning (DML).
+            {translateText('heroSubtitle', selectedLanguage)}
           </p>
         </div>
       </div>
@@ -246,9 +246,9 @@ export const DashboardScreen: React.FC = () => {
                   STEP 1: CROPFIT AI
                 </span>
               </div>
-              <h4 className="text-lg font-bold text-slate-900">CropFit Multilingual Advisor</h4>
+              <h4 className="text-lg font-bold text-slate-900">{translateText('step1Title', selectedLanguage)}</h4>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Query Gemini AI in 5 regional languages via voice or scenario shortcuts to receive customized Syngenta Biological recommendations with XAI rationale.
+                {translateText('step1Desc', selectedLanguage)}
               </p>
             </div>
 
@@ -279,9 +279,9 @@ export const DashboardScreen: React.FC = () => {
                   STEP 2: EARTH ENGINE
                 </span>
               </div>
-              <h4 className="text-lg font-bold text-slate-900">Log Application & Earth Data</h4>
+              <h4 className="text-lg font-bold text-slate-900">{translateText('step2Title', selectedLanguage)}</h4>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Register application details and trigger automated live Google Earth Engine (GEE) satellite NDVI & Soil Moisture Index (SMI) data ingestion terminal.
+                {translateText('step2Desc', selectedLanguage)}
               </p>
             </div>
 
@@ -312,9 +312,9 @@ export const DashboardScreen: React.FC = () => {
                   STEP 3: DOUBLE ML TWIN
                 </span>
               </div>
-              <h4 className="text-lg font-bold text-slate-900">Analyze Yield & Prove ROI</h4>
+              <h4 className="text-lg font-bold text-slate-900">{translateText('step3Title', selectedLanguage)}</h4>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Run client-side Double Machine Learning (DML) causal inference simulator to construct synthetic control baselines and calculate exact ROBI in Rupees.
+                {translateText('step3Desc', selectedLanguage)}
               </p>
             </div>
 

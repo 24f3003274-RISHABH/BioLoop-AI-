@@ -30,8 +30,10 @@ import {
   Legend,
 } from 'recharts';
 
+import { translateText } from '../utils/translations';
+
 export const WeatherSowingAdvisor: React.FC = () => {
-  const { setActiveTab } = useApp();
+  const { setActiveTab, selectedLanguage } = useApp();
   const [selectedWeather, setSelectedWeather] = useState<WeatherCondition>('rainy');
 
   // Weather telemetry map
@@ -246,10 +248,10 @@ export const WeatherSowingAdvisor: React.FC = () => {
           <div>
             <h3 className="text-lg font-bold text-slate-900 font-serif flex items-center gap-2">
               <Sprout className="w-5 h-5 text-emerald-700" />
-              2026 Monsoon Crop Sowing & Rotation Advisor
+              {translateText('sowingTitle', selectedLanguage)}
             </h3>
             <p className="text-xs text-slate-600">
-              Optimal crops for current year sowing vs. high-risk crops to reduce during heavy rain seasons
+              {translateText('sowingDesc', selectedLanguage)}
             </p>
           </div>
           <span className="text-xs font-mono font-bold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full border border-emerald-200 self-start md:self-auto">

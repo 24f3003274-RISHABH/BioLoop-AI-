@@ -33,7 +33,7 @@ export const Header: React.FC = () => {
     { id: 'dashboard', label: translateText('navDashboard', selectedLanguage), icon: LayoutDashboard, badge: null },
     { id: 'sowing', label: translateText('navSowing', selectedLanguage), icon: CloudRain, badge: '2026 Matrix' },
     { id: 'cropfit', label: translateText('navCropfit', selectedLanguage), icon: MessageSquare, badge: 'Gemini AI' },
-    { id: 'satellite', label: 'Satellite Explorer', icon: Globe, badge: 'Leaflet 10m' },
+    { id: 'satellite', label: translateText('navSatellite', selectedLanguage), icon: Globe, badge: 'Leaflet 10m' },
     { id: 'journal', label: translateText('navJournal', selectedLanguage), icon: BookOpen, badge: `${journalRecords.length} Fields` },
     { id: 'causal', label: translateText('navCausal', selectedLanguage), icon: LineChart, badge: 'Double ML' },
     { id: 'benchmark', label: translateText('navBenchmark', selectedLanguage), icon: BarChart2, badge: 'Verified' },

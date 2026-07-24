@@ -1,6 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  CartesianGrid,
+  ReferenceLine,
+} from 'recharts';
+import {
   Globe,
   Layers,
   Sparkles,
@@ -19,6 +30,8 @@ import {
   Thermometer,
   FileText,
   Search,
+  TrendingUp,
+  Calendar,
 } from 'lucide-react';
 
 interface PresetLocation {
@@ -131,6 +144,77 @@ export const SatelliteFieldExplorer: React.FC<SatelliteFieldExplorerProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [plotAreaAcres, setPlotAreaAcres] = useState<number>(4.8);
   const [isScanningGEE, setIsScanningGEE] = useState<boolean>(false);
+  const [timeframe, setTimeframe] = useState<'7d' | '15d' | '30d'>('30d');
+
+  // Helper to generate 30-day historical time series data for recharts
+  const generate30DayHistoricalData = (
+    baseNdvi: number,
+    baseMoisture: number,
+    lat: number,
+    lng: number
+  ) => {
+    const points = [];
+    const today = new Date();
+    const seed = Math.abs(Math.sin(lat * 80 + lng * 30));
+
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+      const progress = (30 - i) / 30;
+      const sprayBoost = i <= 18 ? 0.09 - (i / 18) * 0.02 : 0;
+      const noise = Math.sin(i * 1.4 + seed * 8) * 0.035;
+
+      const ndviVal = Math.min(
+        0.92,
+        Math.max(
+          0.28,
+          Math.round((baseNdvi - 0.16 + progress * 0.18 + sprayBoost + noise) * 100) / 100
+        )
+      );
+
+      const moistureNoise = Math.cos(i * 0.9 + seed * 6) * 3.2;
+      const moistureVal = Math.min(
+        42,
+        Math.max(
+          14,
+          Math.round((baseMoisture - 4 + progress * 6 + moistureNoise) * 10) / 10
+        )
+      );
+
+      const tempVal = Math.round((27 + Math.sin(i * 0.4 + seed) * 3.5) * 10) / 10;
+
+      let event: string | undefined = undefined;
+      if (i === 18) event = '🌱 Syngenta Bio-Spray';
+      if (i === 10) event = '🌧️ Monsoon Shower';
+      if (i === 2) event = '🛰️ Sentinel-2 Pass';
+
+      points.push({
+        date: dateStr,
+        ndvi: ndviVal,
+        moisture: moistureVal,
+        temp: tempVal,
+        event,
+      });
+    }
+
+    return points;
+  };
+
+  const history30Days = generate30DayHistoricalData(
+    activeLocation.ndvi,
+    activeLocation.moisture,
+    activeLocation.lat,
+    activeLocation.lng
+  );
+
+  const displayedHistory =
+    timeframe === '7d'
+      ? history30Days.slice(-7)
+      : timeframe === '15d'
+      ? history30Days.slice(-15)
+      : history30Days;
 
   // Initialize Leaflet Map
   useEffect(() => {
@@ -678,6 +762,142 @@ export const SatelliteFieldExplorer: React.FC<SatelliteFieldExplorerProps> = ({
               <span className="text-emerald-300 font-bold text-sm">-28% Saved</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* 30-Day Historical Satellite Telemetry Chart */}
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div className="flex items-center space-x-2">
+            <TrendingUp className="w-5 h-5 text-emerald-400" />
+            <div>
+              <h3 className="text-sm font-bold text-white font-serif">
+                30-Day Historical Satellite Indices (NDVI & NDWI Moisture)
+              </h3>
+              <p className="text-[11px] text-slate-400">
+                Multi-spectral Sentinel-2 time-series tracking canopy vigor response to Syngenta Biologicals
+              </p>
+            </div>
+          </div>
+
+          {/* Timeframe selector */}
+          <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-mono">
+            <Calendar className="w-3.5 h-3.5 text-slate-400 ml-1.5" />
+            <button
+              onClick={() => setTimeframe('7d')}
+              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                timeframe === '7d'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              7 Days
+            </button>
+            <button
+              onClick={() => setTimeframe('15d')}
+              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                timeframe === '15d'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              15 Days
+            </button>
+            <button
+              onClick={() => setTimeframe('30d')}
+              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                timeframe === '30d'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              30 Days
+            </button>
+          </div>
+        </div>
+
+        {/* Time-Series Stats Header */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
+          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span className="text-slate-400 text-[10px] block">NDVI Biomass Gain (30d)</span>
+            <span className="text-base font-bold text-emerald-400 font-serif">+22.4% Uplift</span>
+            <span className="text-[10px] text-emerald-500 block">Canopy Density Increased</span>
+          </div>
+
+          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span className="text-slate-400 text-[10px] block">Moisture Retention</span>
+            <span className="text-base font-bold text-sky-300 font-serif">28.5% Avg</span>
+            <span className="text-[10px] text-sky-400 block">NDWI Hydration Peak</span>
+          </div>
+
+          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span className="text-slate-400 text-[10px] block">Biological Spray Milestone</span>
+            <span className="text-base font-bold text-amber-300 font-serif">Day 12 Active</span>
+            <span className="text-[10px] text-amber-400 block">Isabion / Quantis Response</span>
+          </div>
+
+          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span className="text-slate-400 text-[10px] block">Urea Replacement Target</span>
+            <span className="text-base font-bold text-teal-300 font-serif">-28.5% Chemical</span>
+            <span className="text-[10px] text-teal-400 block">Saves 25 kg Chemical/Acre</span>
+          </div>
+        </div>
+
+        {/* Recharts LineChart */}
+        <div className="h-[260px] w-full pt-2">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={displayedHistory} margin={{ top: 10, right: 20, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
+              <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} tickLine={false} />
+              <YAxis yAxisId="left" domain={[0, 1.0]} stroke="#10b981" fontSize={11} tickLine={false} />
+              <YAxis yAxisId="right" orientation="right" domain={[0, 50]} stroke="#38bdf8" fontSize={11} tickLine={false} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#020617',
+                  borderColor: '#334155',
+                  borderRadius: '12px',
+                  color: '#fff',
+                  fontSize: '12px',
+                  fontFamily: 'monospace',
+                }}
+                formatter={(value: any, name: string) => {
+                  if (name === 'NDVI Biomass') return [`${value} Index`, 'NDVI Canopy'];
+                  if (name === 'Soil Moisture %') return [`${value}%`, 'Soil Moisture'];
+                  return [value, name];
+                }}
+              />
+              <Legend
+                wrapperStyle={{ paddingTop: '10px', fontSize: '11px', fontFamily: 'monospace' }}
+              />
+              <ReferenceLine
+                yAxisId="left"
+                y={0.6}
+                stroke="#eab308"
+                strokeDasharray="4 4"
+                label={{ value: 'Optimal Threshold (0.60)', fill: '#eab308', fontSize: 10, position: 'insideTopLeft' }}
+              />
+              <Line
+                yAxisId="left"
+                type="monotone"
+                dataKey="ndvi"
+                name="NDVI Biomass"
+                stroke="#10b981"
+                strokeWidth={3}
+                dot={{ r: 3, fill: '#10b981' }}
+                activeDot={{ r: 6, fill: '#34d399' }}
+              />
+              <Line
+                yAxisId="right"
+                type="monotone"
+                dataKey="moisture"
+                name="Soil Moisture %"
+                stroke="#38bdf8"
+                strokeWidth={2}
+                strokeDasharray="5 5"
+                dot={{ r: 2, fill: '#38bdf8' }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
 

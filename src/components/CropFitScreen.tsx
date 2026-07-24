@@ -93,84 +93,153 @@ export const CropFitScreen: React.FC = () => {
     setInputQuery('');
     setIsProcessing(true);
 
-    // Multi-step reasoning simulation
-    const steps = [
-      'Parsing vernacular speech into structured JSON schema (Bhashini NLP pipeline)...',
-      'Querying Google Earth Engine satellite NDVI & soil temperature history...',
-      'Cross-referencing Syngenta Biological Portfolio (Isabion, Quantis, YieldOn)...',
-      'Generating Explainable AI (XAI) rationale in chosen regional language...',
+    const safeText = userText || '';
+    const lowerText = safeText.toLowerCase();
+
+    // Check intent: Greetings & Weather Intent vs Agronomic & Product Recommendation Intent
+    const agronomicKeywords = [
+      'cotton', 'sugarcane', 'tomato', 'paddy', 'wheat', 'chilli', 'groundnut', 'tea',
+      'urea', 'npk', 'fertilizer', 'biostimulant', 'isabion', 'quantis', 'yieldon',
+      'blight', 'pest', 'disease', 'fungus', 'wilt', 'yield', 'stress', 'waterlogging',
+      'heat', 'soil', 'clay', 'loam', 'nitrogen', 'cut', 'reduce', 'khat',
+      'fasal', 'pika', 'piko', 'kheti', 'khet', 'ilaka', 'bhatinda', 'nashik', 'guntur', 'crop'
     ];
 
-    setReasoningStep(steps[0]);
-    setTimeout(() => setReasoningStep(steps[1]), 800);
-    setTimeout(() => setReasoningStep(steps[2]), 1600);
-    setTimeout(() => setReasoningStep(steps[3]), 2400);
+    const hasAgronomicKeyword = agronomicKeywords.some((kw) => lowerText.includes(kw));
+    const isScenarioOrSample = !!scenarioOverride || !!voiceSampleOverride;
+    
+    const weatherOrGreetingKeywords = [
+      'hi', 'hello', 'namaste', 'namaskar', 'vanakkam', 'kem cho', 'sat sri akal', 'hey',
+      'mausam', 'weather', 'barish', 'rain', 'temperature', 'tapman', 'dhoop', 'hawa',
+      'aaj', 'today', 'kaisa', 'kaisa hai', 'kaise', 'hogi', 'kya', 'good morning', 'good evening',
+      'barish hogi', 'weather status'
+    ];
+    const isGreetingOrWeather = !isScenarioOrSample && !hasAgronomicKeyword && (
+      weatherOrGreetingKeywords.some((kw) => lowerText.includes(kw)) || safeText.trim().length < 15
+    );
 
-    setTimeout(() => {
-      // Determine biological match logic
-      const safeText = userText || '';
-      const lowerText = safeText.toLowerCase();
-      const targetCrop = scenarioOverride?.crop || (lowerText.includes('sugarcane') || safeText.includes('ऊसा') ? 'Sugarcane' : lowerText.includes('tomato') || safeText.includes('టమోటా') ? 'Tomatoes' : 'Cotton');
-      const targetStress = scenarioOverride?.stressFactor || (lowerText.includes('rain') || safeText.includes('पाऊस') ? 'Waterlogging' : 'Heat Stress');
-      const targetSoil = scenarioOverride?.soilType || 'Clay';
-      const targetState = scenarioOverride?.state || (safeText.includes('Nashik') || safeText.includes('नाशिक') ? 'Maharashtra' : safeText.includes('Guntur') || safeText.includes('గుంటూరు') ? 'Andhra Pradesh' : 'Punjab');
-      const targetStage = scenarioOverride?.growthStage || 'Flowering Stage';
+    if (isGreetingOrWeather) {
+      // Intent 1: Greetings & Weather Intent - Conversational, warm, NO JSON, NO Match Score, Ask about crop
+      const steps = [
+        'Analyzing query language and intent...',
+        'Fetching live regional weather & agroclimatic status...',
+        'Preparing warm vernacular greeting response...',
+      ];
 
-      let matchedProduct = BIOLOGICAL_PRODUCTS[0]; // Isabion
-      if (targetCrop === 'Sugarcane' || targetStress?.includes('Heat') || targetStress?.includes('38°C') || safeText.includes('Quantis')) {
-        matchedProduct = BIOLOGICAL_PRODUCTS[1]; // Quantis
-      } else if (targetCrop === 'Tomatoes' || targetStage?.includes('Fruit') || targetStage?.includes('Grain')) {
-        matchedProduct = BIOLOGICAL_PRODUCTS[2]; // YieldOn
-      }
+      setReasoningStep(steps[0]);
+      setTimeout(() => setReasoningStep(steps[1]), 600);
+      setTimeout(() => setReasoningStep(steps[2]), 1200);
 
-      const matchScore = targetCrop === 'Cotton' ? 94 : targetCrop === 'Sugarcane' ? 96 : 92;
-      const xaiRationales = generateXAIRationale(matchedProduct, targetCrop, targetSoil, targetStage, targetStress);
+      setTimeout(() => {
+        let greetingResponse = `Namaste! Today's weather in your agricultural zone is warm and sunny with temperatures around 38°C. ☀️\n\nWhat crop are you growing in your field (e.g. Cotton, Sugarcane, Tomato)? Please tell me so I can guide you on crop protection and Syngenta Biological recommendations!`;
 
-      const rec: CropFitRecommendation = {
-        id: `REC-${Date.now()}`,
-        product: matchedProduct,
-        confidenceScore: matchScore,
-        dosageRate: matchedProduct.dosage,
-        optimalWindow: 'Apply within next 48 hours early morning (<30°C soil surface temp)',
-        xaiRationale: xaiRationales,
-        scenarioContext: {
-          state: targetState,
-          crop: targetCrop,
-          growthStage: targetStage,
-          stressFactor: targetStress,
-          soilType: targetSoil,
-        },
-        timestamp: new Date().toISOString(),
-      };
+        if (lowerText.includes('aaj') || lowerText.includes('mausam') || lowerText.includes('barish') || lowerText.includes('kaisa') || lowerText.includes('namaste') || lowerText.includes('hi')) {
+          if (selectedLanguage === 'hi' || lowerText.includes('kaisa') || lowerText.includes('mausam') || lowerText.includes('hogi')) {
+            greetingResponse = `नमस्ते! आज आपके क्षेत्र में मौसम गर्म और धूप वाला है, तापमान लगभग 38°C है और हल्की हवा चल रही है। ☀️\n\nआप अपने खेत में कौन सी फसल (कपास, गन्ना, टमाटर, मिर्च आदि) उगा रहे हैं? मुझे बताएं ताकि मैं आपकी फसल की सुरक्षा और यूरिया/NPK की बचत के लिए सही सिंजेंटा जैविक सलाह दे सकूं!`;
+          } else if (selectedLanguage === 'mr' || lowerText.includes('हवामान')) {
+            greetingResponse = `नमस्कार! आज तुमच्या भागात हवामान खूप उष्ण आणि कडक उन्हाचे आहे, तापमान सुमारे ३८°C आहे. ☀️\n\nतुम्ही तुमच्या शेतात कोणते पीक (ऊस, कापूस, टोमॅटो) घेतले आहे? मला सांगा जेणेकरून मी तुम्हाला योग्य सिंजेंटा जैविक खतांचा सल्ला देऊ शकेन!`;
+          } else if (selectedLanguage === 'te') {
+            greetingResponse = `నమస్కారం! ఈరోజు వాతావరణం చాలా వేడిగా మరియు ఎండగా ఉంది, ఉష్ణోగ్రత సుమారు 38°Cగా ఉంది. ☀️\n\nమీరు ఏ పంట (మిర్చి, పత్తి, టమోటా) సాగు చేస్తున్నారు? నాకు వివరాలు తెలియజేయండి, తద్వారా సింజెంటా బయోలాజికల్స్ సలహాలను అందించగలను!`;
+          } else if (selectedLanguage === 'ta') {
+            greetingResponse = `வணக்கம்! இன்று வானிலை மிகவும் சூடாகவும் வெயிலாகவும் உள்ளது, வெப்பநிலை சுமார் 38°C ஆகும். ☀️\n\nநீங்கள் என்ன பயிர் (பருத்தி, தக்காளி, கரும்பு) பயிரிடுகிறீர்கள்? எனக்கு தெரியப்படுத்துங்கள்!`;
+          } else if (selectedLanguage === 'pa') {
+            greetingResponse = `ਸਤਿ ਸ਼੍ਰੀ ਅਕਾਲ! ਅੱਜ ਤੁਹਾਡੇ ਇਲਾਕੇ ਵਿੱਚ ਮੌਸਮ ਕਾਫ਼ੀ ਗਰਮ ਅਤੇ ਧੁੱਪ ਵਾਲਾ ਹੈ, ਤਾਪਮਾਨ ਲਗਭਗ 38°C ਹੈ। ☀️\n\nਤੁਸੀਂ ਕਿਹੜੀ ਫ਼ਸਲ (ਨਰਮਾ, ਝੋਨਾ, ਗੰਨਾ) ਬੀਜੀ ਹੈ? ਮੈਨੂੰ ਦੱਸੋ ਤਾਂ ਜੋ ਮੈਂ ਤੁਹਾਨੂੰ ਸਹੀ ਬਾਇਓਲੋਜੀਕਲ ਖਾਦ ਦੀ ਸਲਾਹ ਦੇ ਸਕਾਂ!`;
+          } else if (selectedLanguage === 'gu') {
+            greetingResponse = `નમસ્તે! આજે હવામાન ખૂબ ગરમ અને તડકા વાળું છે, તાપમાન લગભગ 38°C જેટલું છે. ☀️\n\nતમે તમારા ખેતરમાં કયો પાક (કપાસ, મગફળી, શેરડી) વાવ્યો છે? મને જણાવો જેથી હું તમને યોગ્ય સલાહ આપી શકું!`;
+          }
+        }
 
-      addRecommendation(rec);
+        const botMsg: ChatMessage = {
+          id: `msg-bot-${Date.now()}`,
+          sender: 'bot',
+          text: greetingResponse,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          // Explicitly NO recommendation or parsedSchema for greetings/weather queries
+        };
 
-      const parsedJsonData = voiceSampleOverride
-        ? voiceSampleOverride.parsedJson
-        : activeVoiceSample
-        ? activeVoiceSample.parsedJson
-        : {
-            extractedCrop: targetCrop,
-            extractedState: targetState,
-            extractedStress: targetStress,
-            extractedSoil: targetSoil,
-            prescribedBio: matchedProduct.name,
-          };
+        setChatHistory((prev) => [...prev, botMsg]);
+        setIsProcessing(false);
+        setReasoningStep('');
+        setActiveVoiceSample(null);
+      }, 1800);
 
-      const botMsg: ChatMessage = {
-        id: `msg-bot-${Date.now()}`,
-        sender: 'bot',
-        text: `Based on Gemini LLM analysis for ${targetCrop} in ${targetState}, here is your matched Syngenta Biological prescription:`,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        recommendation: rec,
-        parsedSchema: parsedJsonData,
-      };
+    } else {
+      // Intent 2: Agronomic & Product Recommendation Intent - Structured JSON + XAI rationale + Recommendation
+      const steps = [
+        'Parsing vernacular speech into structured JSON schema (Bhashini NLP pipeline)...',
+        'Querying Google Earth Engine satellite NDVI & soil temperature history...',
+        'Cross-referencing Syngenta Biological Portfolio (Isabion, Quantis, YieldOn)...',
+        'Generating Explainable AI (XAI) rationale in chosen regional language...',
+      ];
 
-      setChatHistory((prev) => [...prev, botMsg]);
-      setIsProcessing(false);
-      setReasoningStep('');
-      setActiveVoiceSample(null);
-    }, 3000);
+      setReasoningStep(steps[0]);
+      setTimeout(() => setReasoningStep(steps[1]), 800);
+      setTimeout(() => setReasoningStep(steps[2]), 1600);
+      setTimeout(() => setReasoningStep(steps[3]), 2400);
+
+      setTimeout(() => {
+        const targetCrop = scenarioOverride?.crop || (lowerText.includes('sugarcane') || safeText.includes('ऊसा') || lowerText.includes('gane') ? 'Sugarcane' : lowerText.includes('tomato') || safeText.includes('టమోటా') ? 'Tomatoes' : 'Cotton');
+        const targetStress = scenarioOverride?.stressFactor || (lowerText.includes('rain') || safeText.includes('पाऊस') || lowerText.includes('water') ? 'Waterlogging' : 'Heat Stress');
+        const targetSoil = scenarioOverride?.soilType || 'Clay';
+        const targetState = scenarioOverride?.state || (safeText.includes('Nashik') || safeText.includes('नाशिक') ? 'Maharashtra' : safeText.includes('Guntur') || safeText.includes('గుంటూరు') ? 'Andhra Pradesh' : 'Punjab');
+        const targetStage = scenarioOverride?.growthStage || 'Flowering Stage';
+
+        let matchedProduct = BIOLOGICAL_PRODUCTS[0]; // Isabion
+        if (targetCrop === 'Sugarcane' || targetStress?.includes('Heat') || targetStress?.includes('38°C') || safeText.includes('Quantis')) {
+          matchedProduct = BIOLOGICAL_PRODUCTS[1]; // Quantis
+        } else if (targetCrop === 'Tomatoes' || targetStage?.includes('Fruit') || targetStage?.includes('Grain')) {
+          matchedProduct = BIOLOGICAL_PRODUCTS[2]; // YieldOn
+        }
+
+        const matchScore = targetCrop === 'Cotton' ? 94 : targetCrop === 'Sugarcane' ? 96 : 92;
+        const xaiRationales = generateXAIRationale(matchedProduct, targetCrop, targetSoil, targetStage, targetStress);
+
+        const rec: CropFitRecommendation = {
+          id: `REC-${Date.now()}`,
+          product: matchedProduct,
+          confidenceScore: matchScore,
+          dosageRate: matchedProduct.dosage,
+          optimalWindow: 'Apply within next 48 hours early morning (<30°C soil surface temp)',
+          xaiRationale: xaiRationales,
+          scenarioContext: {
+            state: targetState,
+            crop: targetCrop,
+            growthStage: targetStage,
+            stressFactor: targetStress,
+            soilType: targetSoil,
+          },
+          timestamp: new Date().toISOString(),
+        };
+
+        addRecommendation(rec);
+
+        const parsedJsonData = voiceSampleOverride
+          ? voiceSampleOverride.parsedJson
+          : activeVoiceSample
+          ? activeVoiceSample.parsedJson
+          : {
+              extractedCrop: targetCrop,
+              extractedState: targetState,
+              extractedStress: targetStress,
+              extractedSoil: targetSoil,
+              prescribedBio: matchedProduct.name,
+            };
+
+        const botMsg: ChatMessage = {
+          id: `msg-bot-${Date.now()}`,
+          sender: 'bot',
+          text: `Based on Gemini LLM analysis for ${targetCrop} in ${targetState}, here is your matched Syngenta Biological prescription:`,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          recommendation: rec,
+          parsedSchema: parsedJsonData,
+        };
+
+        setChatHistory((prev) => [...prev, botMsg]);
+        setIsProcessing(false);
+        setReasoningStep('');
+        setActiveVoiceSample(null);
+      }, 3000);
+    }
   };
 
   return (
