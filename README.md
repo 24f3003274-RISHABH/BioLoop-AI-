@@ -1,4 +1,4 @@
-# 🌿 BioLoop AI (Syngenta Biologicals & ANNAM.AI)
+# 🌿 BioLoop AI (Syngenta Biologicals & ANNAM.AI X IIT ROPAR)
 
 > **Integrated Causal Yield & CropFit Platform** — Powered by Causal Machine Learning, Gemini 2.5 Flash Multilingual Reasoning, and Real-Time Agricultural Telemetry.
 
